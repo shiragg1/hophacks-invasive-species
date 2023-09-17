@@ -9,18 +9,16 @@ Created on Sat Sep 16 13:27:05 2023
 import requests
 from bs4 import BeautifulSoup
 import os
+import os.path 
 
 headers = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"}
 
-count = 1
-folder_name = 'plant1'
 
-def create_images(plant_search):
+def create_images(plant_search, plant_species):
     
     # input: google search
     # output: folder
     
-    global count
     # send HTTP request
     url = 'https://www.google.com/search?q=' + plant_search + '&tbm=isch'
     response = requests.get(url, headers=headers)
@@ -38,26 +36,36 @@ def create_images(plant_search):
             #print(img_urls)
     
     # create an image folder
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
+    if not os.path.exists(plant_species):
+        os.makedirs(plant_species)
     
     # download all pictures
-    for i, url in enumerate(img_urls):
+    for url in img_urls:
         response = requests.get(url, headers=headers)
-        with open(f"{folder_name}/{count}.jpg", 'wb') as f:
+        with open(f"{plant_species}/{len(os.listdir(f'./{plant_species}'))}.jpg", 'wb') as f:
             f.write(response.content)
-            count += 1
 
-# do multiple function calls to create multiple folders of images
-# need to replace 
-create_images('Berberis+thunbergii')
-create_images('Berberis+thunbergii+fall')
-create_images('Berberis+thunbergii+spring')
-create_images('Berberis+thunbergii+pink')
-create_images('Berberis+thunbergii+purple')
-create_images('Berberis+thunbergii+bluish+green')
-create_images('Berberis+thunbergii+nice+photos')
-create_images('Berberis+thunbergii+baltimore')
-create_images('Berberis+thunbergii+forest')
-              
+
+def image_run(plant_name):
+    
+    create_images(f'{plant_name}', f'{plant_name}')
+    create_images(f'{plant_name}+fall', f'{plant_name}')
+    create_images(f'{plant_name}+spring', f'{plant_name}')
+    create_images(f'{plant_name}+pink', f'{plant_name}')
+    create_images(f'{plant_name}+purple', f'{plant_name}')
+    create_images(f'{plant_name}+bluish+green', f'{plant_name}')
+    create_images(f'{plant_name}+yellow', f'{plant_name}')
+    create_images(f'{plant_name}+green', f'{plant_name}')
+    create_images(f'{plant_name}+nice+photos', f'{plant_name}')
+    create_images(f'{plant_name}+baltimore', f'{plant_name}')
+    create_images(f'{plant_name}+forest', f'{plant_name}')
+
+image_run('Berberis+thunbergii') # Invasive
+image_run('Corydalis+incisa') # Invasive
+image_run('Celtis occidentalis') # Common
+image_run('Cercis canadensis') # Common
+image_run('Quercus alba') # Common
+image_run('Nyssa sylvatica') # Common
+image_run('Pinus virginiana') # Common
+
 
